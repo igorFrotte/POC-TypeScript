@@ -2,9 +2,9 @@ import { taskSchema } from "../schemas/task.schema.js";
 import { createTask, getTaskById, updateStatus, deleteTask, tasksByUser } from "../repositores/task.repository.js";
 import { getUserById } from "../repositores/user.repository.js";
 import { STATUS_CODE } from "../enums/statusCode.js";
+import { Request, Response} from "express";
 
-
-async function create(req, res) {
+async function create(req: Request, res: Response) {
     const { name, description, day, status, userId } = req.body;
     const validation = taskSchema.validate(req.body);
   
@@ -22,10 +22,10 @@ async function create(req, res) {
     }
 }
 
-async function read(req, res) {
+async function read(req: Request, res: Response) {
     const { id } = req.params;
 
-    if(isNaN(id)) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
+    if(isNaN(Number(id))) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
   
     try {
       const task = (await getTaskById(id)).rows;
@@ -37,10 +37,10 @@ async function read(req, res) {
     }
 }
 
-async function update(req, res) {
+async function update(req: Request, res: Response) {
     const { id } = req.params;
 
-    if(isNaN(id)) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
+    if(isNaN(Number(id))) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
   
     try {
       const task = (await getTaskById(id)).rows;
@@ -55,10 +55,10 @@ async function update(req, res) {
     }
 }
 
-async function delet(req, res) {
+async function delet(req: Request, res: Response) {
     const { id } = req.params;
 
-    if(isNaN(id)) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
+    if(isNaN(Number(id))) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
   
     try {
       const task = (await getTaskById(id)).rows;
@@ -72,10 +72,10 @@ async function delet(req, res) {
     }
 }
 
-async function aggregator(req, res) {
+async function aggregator(req: Request, res: Response) {
     const { id } = req.params;
 
-    if(isNaN(id)) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
+    if(isNaN(Number(id))) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
   
     try {
       const user = (await getUserById(id)).rows;

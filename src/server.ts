@@ -13,6 +13,5 @@ server.get("/status", (req, res) => {
 });
 
 server.listen(
-  4000,
-  console.log(`Listening to PORT 4000`)
+  4000, () => console.log("Listening to PORT 4000")
 );
