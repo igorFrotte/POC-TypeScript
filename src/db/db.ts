@@ -2,18 +2,12 @@ import pg from 'pg';
 
 const { Pool } = pg;
 
-const user = 'postgres';
-const password = '12345';
-const host = 'localhost';
-const port = 5432;
-const database = 'poctype';
-
 const connection = new Pool({
-  user,
-  password,
-  host,
-  port,
-  database
+  user: 'postgres',
+  password: '12345',
+  host: 'localhost',
+  port: 5432,
+  database: 'poctype'
 });
 
  export default connection;

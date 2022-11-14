@@ -1,6 +1,9 @@
 import connection from "../db/db.js";
+import { QueryResult } from 'pg';
+import { Task, TaskEntity } from '../protocols/task.js';
+import { Count } from '../protocols/count.js';
 
-async function createTask (name, description, day, status, userId ) {
+async function createTask ( task : Task ) :Promise<void> {
     await connection.query(
         `
             INSERT INTO tasks 
@@ -8,13 +11,21 @@ async function createTask (name, description, day, status, userId ) {
             VALUES 
                 ($1, $2, $3, $4, $5);  
         `,
-        [name, description, day, status, userId]
+        [task.name, task.description, task.day, task.status, task.userId]
     );
 
     return;
 }
 
-async function getTaskById (taskId) {
+async function getAll () :Promise<QueryResult<TaskEntity>> {
+    return await connection.query(
+        `
+            SELECT * FROM tasks;  
+        `
+    );
+}
+
+async function getTaskById (taskId : Number) :Promise<QueryResult<TaskEntity>> {
     return await connection.query(
         `
             SELECT * FROM tasks WHERE id = $1;  
@@ -23,7 +34,7 @@ async function getTaskById (taskId) {
     );
 }
 
-async function updateStatus (taskId) {
+async function updateStatus (taskId : Number) :Promise<void> {
     await connection.query(
         `
         UPDATE tasks SET
@@ -36,7 +47,7 @@ async function updateStatus (taskId) {
     return;
 }
 
-async function deleteTask (taskId) {
+async function deleteTask (taskId : Number) :Promise<void> {
     await connection.query(
         `
         DELETE FROM tasks
@@ -48,7 +59,7 @@ async function deleteTask (taskId) {
     return;
 }
 
-async function tasksByUser (userId) {
+async function tasksByUser (userId : Number) :Promise<QueryResult<Count>> {
     return await connection.query(
         `
         SELECT COUNT(id) AS quant FROM tasks
@@ -61,6 +72,7 @@ async function tasksByUser (userId) {
 export {
     createTask,
     getTaskById,
+    getAll,
     updateStatus,
     deleteTask,
     tasksByUser

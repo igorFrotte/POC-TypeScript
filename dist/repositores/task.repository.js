@@ -35,11 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import connection from "../db/db.js";
-function createTask(name, description, day, status, userId) {
+function createTask(task) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, connection.query("\n            INSERT INTO tasks \n                (name, description, day, status, \"userId\") \n            VALUES \n                ($1, $2, $3, $4, $5);  \n        ", [name, description, day, status, userId])];
+                case 0: return [4 /*yield*/, connection.query("\n            INSERT INTO tasks \n                (name, description, day, status, \"userId\") \n            VALUES \n                ($1, $2, $3, $4, $5);  \n        ", [task.name, task.description, task.day, task.status, task.userId])];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];

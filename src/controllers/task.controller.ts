@@ -1,12 +1,13 @@
 import { taskSchema } from "../schemas/task.schema.js";
-import { createTask, getTaskById, updateStatus, deleteTask, tasksByUser } from "../repositores/task.repository.js";
+import { createTask, getTaskById, updateStatus, deleteTask, tasksByUser, getAll } from "../repositores/task.repository.js";
 import { getUserById } from "../repositores/user.repository.js";
 import { STATUS_CODE } from "../enums/statusCode.js";
 import { Request, Response} from "express";
+import { Task } from '../protocols/task.js';
 
 async function create(req: Request, res: Response) {
-    const { name, description, day, status, userId } = req.body;
-    const validation = taskSchema.validate(req.body);
+    const newTask = req.body as Task;
+    const validation = taskSchema.validate(newTask);
   
     if (validation.error) {
       const errors = validation.error.details.map((detail) => detail.message);
@@ -14,7 +15,7 @@ async function create(req: Request, res: Response) {
     }  
   
     try {
-      await createTask(name, description, day, status, userId);
+      await createTask(newTask);
   
       return res.sendStatus(STATUS_CODE.CREATED);
     } catch (error) {
@@ -22,8 +23,18 @@ async function create(req: Request, res: Response) {
     }
 }
 
+async function readAll(req: Request, res: Response) {
+  try {
+    const tasks = (await getAll()).rows;
+
+    return res.status(STATUS_CODE.OK).send(tasks);
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+  }
+}
+
 async function read(req: Request, res: Response) {
-    const { id } = req.params;
+    const id : number = Number(req.params.id);
 
     if(isNaN(Number(id))) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
   
@@ -38,7 +49,7 @@ async function read(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
-    const { id } = req.params;
+    const id : number = Number(req.params.id);
 
     if(isNaN(Number(id))) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
   
@@ -56,7 +67,7 @@ async function update(req: Request, res: Response) {
 }
 
 async function delet(req: Request, res: Response) {
-    const { id } = req.params;
+    const id : number = Number(req.params.id);
 
     if(isNaN(Number(id))) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
   
@@ -73,7 +84,7 @@ async function delet(req: Request, res: Response) {
 }
 
 async function aggregator(req: Request, res: Response) {
-    const { id } = req.params;
+    const id : number = Number(req.params.id);
 
     if(isNaN(Number(id))) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
   
@@ -89,4 +100,4 @@ async function aggregator(req: Request, res: Response) {
     }
 }
 
-export { create, read, update, delet, aggregator };
+export { create, read, update, delet, aggregator, readAll };

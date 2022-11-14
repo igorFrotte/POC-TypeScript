@@ -40,25 +40,25 @@ import { getUserById } from "../repositores/user.repository.js";
 import { STATUS_CODE } from "../enums/statusCode.js";
 function create(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, name, description, day, status, userId, validation, errors, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var newTask, validation, errors, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = req.body, name = _a.name, description = _a.description, day = _a.day, status = _a.status, userId = _a.userId;
-                    validation = taskSchema.validate(req.body);
+                    newTask = req.body;
+                    validation = taskSchema.validate(newTask);
                     if (validation.error) {
                         errors = validation.error.details.map(function (detail) { return detail.message; });
                         return [2 /*return*/, res.status(STATUS_CODE.UNPROCESSABLE).send(errors)];
                     }
-                    _b.label = 1;
+                    _a.label = 1;
                 case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, createTask(name, description, day, status, userId)];
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, createTask(newTask)];
                 case 2:
-                    _b.sent();
+                    _a.sent();
                     return [2 /*return*/, res.sendStatus(STATUS_CODE.CREATED)];
                 case 3:
-                    error_1 = _b.sent();
+                    error_1 = _a.sent();
                     return [2 /*return*/, res.status(STATUS_CODE.SERVER_ERROR).send(error_1.message)];
                 case 4: return [2 /*return*/];
             }
@@ -71,7 +71,7 @@ function read(req, res) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = req.params.id;
+                    id = Number(req.params.id);
                     if (isNaN(Number(id)))
                         return [2 /*return*/, res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number")];
                     _a.label = 1;
@@ -97,7 +97,7 @@ function update(req, res) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = req.params.id;
+                    id = Number(req.params.id);
                     if (isNaN(Number(id)))
                         return [2 /*return*/, res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number")];
                     _a.label = 1;
@@ -128,7 +128,7 @@ function delet(req, res) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = req.params.id;
+                    id = Number(req.params.id);
                     if (isNaN(Number(id)))
                         return [2 /*return*/, res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number")];
                     _a.label = 1;
@@ -157,7 +157,7 @@ function aggregator(req, res) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    id = req.params.id;
+                    id = Number(req.params.id);
                     if (isNaN(Number(id)))
                         return [2 /*return*/, res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number")];
                     _a.label = 1;
