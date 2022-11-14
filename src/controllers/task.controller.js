@@ -55,4 +55,21 @@ async function update(req, res) {
     }
 }
 
-export { create, read, update };
+async function delet(req, res) {
+    const { id } = req.params;
+
+    if(isNaN(id)) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
+  
+    try {
+      const task = (await getTaskById(id)).rows;
+      if (!task.length) return res.status(STATUS_CODE.NOT_FOUND).send("Task not found");
+      
+      await deleteTask(id);
+  
+      return res.status(STATUS_CODE.OK).send("Task was deleted");
+    } catch (error) {
+      return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+    }
+  }
+
+export { create, read, update, delet };
