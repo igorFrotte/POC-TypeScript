@@ -15,14 +15,12 @@ async function createTask (name, description, day, status, userId ) {
 }
 
 async function getTaskById (taskId) {
-    await connection.query(
+    return await connection.query(
         `
             SELECT * FROM tasks WHERE id = $1;  
         `,
         [taskId]
     );
-
-    return;
 }
 
 async function updateStatus (taskId) {

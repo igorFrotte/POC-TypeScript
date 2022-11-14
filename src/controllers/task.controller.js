@@ -1,6 +1,8 @@
 import { taskSchema } from "../schemas/task.schema.js";
 import { createTask, getTaskById, updateStatus, deleteTask, tasksByUser } from "../repositores/task.repository.js";
+import { getUserById } from "../repositores/user.repository.js";
 import { STATUS_CODE } from "../enums/statusCode.js";
+
 
 async function create(req, res) {
     const { name, description, day, status, userId } = req.body;
@@ -16,8 +18,23 @@ async function create(req, res) {
   
       return res.sendStatus(STATUS_CODE.CREATED);
     } catch (error) {
-      return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+      return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
     }
 }
 
-export { create };
+async function read(req, res) {
+    const { id } = req.params;
+
+    if(isNaN(id)) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
+  
+    try {
+      const task = (await getTaskById(id)).rows;
+      if (!task.length) return res.status(STATUS_CODE.NOT_FOUND).send("Task not found");
+
+      return res.status(STATUS_CODE.OK).send(task[0]);
+    } catch (error) {
+      return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+    }
+  }
+
+export { create, read };
