@@ -1,9 +1,12 @@
 import express from "express";
 import cors from "cors";
+import taskRouter from "./routers/task.router.js"
 
 const server = express();
 server.use(express.json());
 server.use(cors());
+
+server.use(taskRouter);
 
 server.get("/status", (req, res) => {
   res.sendStatus(200);

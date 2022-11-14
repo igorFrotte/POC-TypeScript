@@ -1,6 +1,6 @@
 import connection from "../db/db.js";
 
-async function createTask (userId, name, description, day, status) {
+async function createTask (name, description, day, status, userId ) {
     await connection.query(
         `
             INSERT INTO tasks 
