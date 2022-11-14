@@ -70,6 +70,23 @@ async function delet(req, res) {
     } catch (error) {
       return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
     }
-  }
+}
 
-export { create, read, update, delet };
+async function aggregator(req, res) {
+    const { id } = req.params;
+
+    if(isNaN(id)) return res.status(STATUS_CODE.BAD_REQUEST).send("Id must be a number");
+  
+    try {
+      const user = (await getUserById(id)).rows;
+      if (!user.length) return res.status(STATUS_CODE.NOT_FOUND).send("User not found");
+
+      const count = (await tasksByUser(id)).rows;
+
+      return res.status(STATUS_CODE.OK).send(count[0].quant);
+    } catch (error) {
+      return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+    }
+}
+
+export { create, read, update, delet, aggregator };

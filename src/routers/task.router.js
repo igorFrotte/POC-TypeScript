@@ -1,5 +1,5 @@
 import express from 'express';
-import { create, delet, read, update } from '../controllers/task.controller.js';
+import { aggregator, create, delet, read, update } from '../controllers/task.controller.js';
 
 const router = express.Router();
 
@@ -7,5 +7,6 @@ router.post('/task', create);
 router.get('/task/:id', read);
 router.post('/task/:id', update);
 router.delete('/task/:id', delet);
+router.get('/count/:id', aggregator);
 
 export default router;

@@ -49,15 +49,13 @@ async function deleteTask (taskId) {
 }
 
 async function tasksByUser (userId) {
-    await connection.query(
+    return await connection.query(
         `
-        SELECT COUNT(id) FROM tasks
+        SELECT COUNT(id) AS quant FROM tasks
         WHERE "userId" = $1;
         `,
         [userId]
     );
-
-    return;
 }
 
 export {
